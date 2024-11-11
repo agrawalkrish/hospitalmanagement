@@ -1,7 +1,7 @@
 // Main script to load components
 document.addEventListener("DOMContentLoaded", function () {
-    loadComponent("navbar", "components/navbar.html");
-    loadComponent("main-content", "components/dashboard.html");
+    loadComponent("navbar", "components/navbar.htm");
+    loadComponent("main-content", "components/dashboard.htm");
 });
 
 function loadComponent(elementId, filePath) {
@@ -13,5 +13,5 @@ function loadComponent(elementId, filePath) {
 }
 
 function navigateTo(page) {
-    loadComponent("main-content", `components/${page}.html`);
+    loadComponent("main-content", `components/${page}.htm`);
 }
