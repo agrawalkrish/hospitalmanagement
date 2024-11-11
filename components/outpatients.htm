@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management - Outpatient Records</title>
+</head>
+<body>
+    <h1>Outpatient Records Management</h1>
+
+    <!-- Form to Add New Outpatient Record -->
+    <form id="addOutpatientForm" onsubmit="addOutpatient(event)">
+        <label for="patient_id">Patient ID:</label>
+        <input type="number" id="patient_id" required>
+
+        <label for="visit_date">Visit Date:</label>
+        <input type="date" id="visit_date" required>
+
+        <label for="reason_for_visit">Reason for Visit:</label>
+        <textarea id="reason_for_visit" required></textarea>
+
+        <label for="diagnosis">Diagnosis:</label>
+        <textarea id="diagnosis" required></textarea>
+
+        <label for="treatment_provided">Treatment Provided:</label>
+        <textarea id="treatment_provided" required></textarea>
+
+        <button type="submit">Add Outpatient Record</button>
+    </form>
+
+    <!-- Table to Display Outpatient Records -->
+    <table id="outpatientTable" border="1">
+        <tr>
+            <th>Outpatient ID</th>
+            <th>Patient</th>
+            <th>Visit Date</th>
+            <th>Reason for Visit</th>
+            <th>Diagnosis</th>
+            <th>Treatment Provided</th>
+        </tr>
+    </table>
+
+    <script>
+        // Fetch and display all outpatient records when loading the page
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("http://localhost:3000/outpatientRecords")
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById("outpatientTable");
+                    data.forEach(record => {
+                        const newRow = table.insertRow();
+                        newRow.innerHTML = `
+                            <td>${record.outpatient_id}</td>
+                            <td>${record.patient_first_name} ${record.patient_last_name} (ID: ${record.patient_id})</td>
+                            <td>${record.visit_date}</td>
+                            <td>${record.reason_for_visit}</td>
+                            <td>${record.diagnosis}</td>
+                            <td>${record.treatment_provided}</td>
+                        `;
+                    });
+                })
+                .catch(error => console.error("Error fetching outpatient records:", error));
+        });
+
+        // Function to handle form submission and add a new outpatient record
+        function addOutpatient(event) {
+            event.preventDefault();
+
+            const outpatientData = {
+                patient_id: document.getElementById("patient_id").value,
+                visit_date: document.getElementById("visit_date").value,
+                reason_for_visit: document.getElementById("reason_for_visit").value,
+                diagnosis: document.getElementById("diagnosis").value,
+                treatment_provided: document.getElementById("treatment_provided").value,
+            };
+
+            fetch("http://localhost:3000/outpatientRecords", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(outpatientData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+
+                // Append the new outpatient record to the table
+                const table = document.getElementById("outpatientTable");
+                const newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td>${data.outpatientId}</td>
+                    <td>${outpatientData.patient_id}</td>
+                    <td>${outpatientData.visit_date}</td>
+                    <td>${outpatientData.reason_for_visit}</td>
+                    <td>${outpatientData.diagnosis}</td>
+                    <td>${outpatientData.treatment_provided}</td>
+                `;
+
+                // Clear the form
+                document.getElementById("addOutpatientForm").reset();
+            })
+            .catch(error => console.error("Error adding outpatient record:", error));
+        }
+    </script>
+</body>
+</html>
