@@ -14,8 +14,8 @@ app.use(cors());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",        // replace with your MySQL username
-    password: "password", // replace with your MySQL password
-    database: "hospital_management"
+    password: "Kir@n197#", // replace with your MySQL password
+    database: "hospitalmanagement"
 });
 
 db.connect((err) => {
@@ -50,6 +50,24 @@ app.post("/patients", (req, res) => {
             res.status(500).json({ error: err });
         } else {
             res.json({ message: "Patient added successfully", patientId: results.insertId });
+        }
+    });
+});
+
+// Delete a patient by ID
+app.delete("/patients/:id", (req, res) => {
+    const patientId = req.params.id;
+    const sql = "DELETE FROM Patients WHERE patient_id = ?";
+
+    db.query(sql, [patientId], (err, results) => {
+        if (err) {
+            console.error("Error deleting patient:", err);
+            res.status(500).json({ error: "Database error" });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ message: "Patient not found" });
+        } else {
+            console.log("Patient deleted successfully, ID:", patientId);
+            res.json({ message: "Patient deleted successfully" });
         }
     });
 });
