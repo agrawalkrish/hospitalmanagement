@@ -1,14 +1,81 @@
 <div class="card">
     <h2>Manage Patients</h2>
-    <button onclick="addPatient()">Add New Patient</button>
-    <table>
-        <tr><th>ID</th><th>Name</th><th>Age</th><th>Actions</th></tr>
-        <!-- Patient rows will be added dynamically -->
+    
+    <!-- Add Patient Form -->
+    <form id="addPatientForm" onsubmit="addPatient(event)">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        
+        <label for="date_of_birth">Date of Birth:</label>
+        <input type="date" id="date_of_birth" name="date_of_birth">
+        
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender">
+        
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address">
+        
+        <label for="contact_number">Contact Number:</label>
+        <input type="text" id="contact_number" name="contact_number">
+        
+        <label for="insurance_information">Insurance Information:</label>
+        <input type="text" id="insurance_information" name="insurance_information">
+        
+        <button type="submit">Add Patient</button>
+    </form>
+
+    <!-- Display Patient List -->
+    <h3>Patient List</h3>
+    <table id="patientTable">
+        <tr>
+            <th>Patient ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>Contact</th>
+            <th>Insurance Info</th>
+        </tr>
+        <!-- Rows for patient data will be dynamically inserted here -->
     </table>
 </div>
 <script>
-function addPatient() {
-    // Code to add a new patient record
-    alert("Add Patient functionality goes here.");
-}
+    // Function to handle form submission
+    function addPatient(event) {
+        event.preventDefault();
+        
+        const patientData = {
+            first_name: document.getElementById("first_name").value,
+            last_name: document.getElementById("last_name").value,
+            date_of_birth: document.getElementById("date_of_birth").value,
+            gender: document.getElementById("gender").value,
+            address: document.getElementById("address").value,
+            contact_number: document.getElementById("contact_number").value,
+            insurance_information: document.getElementById("insurance_information").value,
+        };
+
+        // Placeholder for sending patientData to the backend
+        console.log("Patient Data to Submit:", patientData);
+
+        // Simulate adding patient to the table (replace with real backend data)
+        const table = document.getElementById("patientTable");
+        const newRow = table.insertRow();
+        newRow.innerHTML = `
+            <td>Auto-generated</td>
+            <td>${patientData.first_name}</td>
+            <td>${patientData.last_name}</td>
+            <td>${patientData.date_of_birth}</td>
+            <td>${patientData.gender}</td>
+            <td>${patientData.address}</td>
+            <td>${patientData.contact_number}</td>
+            <td>${patientData.insurance_information}</td>
+        `;
+        
+        // Clear the form
+        document.getElementById("addPatientForm").reset();
+    }
 </script>
