@@ -428,7 +428,7 @@
       function updatebill(billId) {
           if (confirm("Are you sure you want to update this bill?")) {
             fetch(`http://localhost:3000/update-bill/${billId}`, {
-              method: "UPDATE",
+              method: "POST",
             })
               .then((response) => {
                 if (!response.ok) throw new Error("Failed to update bill");

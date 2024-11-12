@@ -144,6 +144,11 @@
                     <a href="appointments.htm"> BOOK APPOINTMENT </a>
                   </li>
                   <!-- End Appointment -->
+                   <!-- Billing -->
+                  <li class="mega-menu-fullwidth">
+                    <a href="billing.htm">BILLING </a>
+                  </li>
+                  <!-- End BILLING -->
                 </ul>
               </div>
             </div>
@@ -437,7 +442,7 @@
       function updateappointment(appointmentId) {
           if (confirm("Are you sure you want to update this appointment?")) {
             fetch(`http://localhost:3000/update-appointment/${appointmentId}`, {
-              method: "UPDATE",
+              method: "POST",
             })
               .then((response) => {
                 if (!response.ok) throw new Error("Failed to update appointment");
