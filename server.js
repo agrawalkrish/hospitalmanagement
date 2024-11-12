@@ -86,99 +86,81 @@ app.post("/add-doctor", (req, res) => {
     });
   });
 
-// Get all appointments with patient and doctor details
-app.get("/appointments", (req, res) => {
-    const sql = `
-        SELECT 
-            a.appointment_id, 
-            a.appointment_date, 
-            a.appointment_time, 
-            a.appointment_reason, 
-            a.appointment_status,
-            p.patient_id, 
-            p.first_name AS patient_first_name, 
-            p.last_name AS patient_last_name,
-            d.doctor_id, 
-            d.first_name AS doctor_first_name, 
-            d.last_name AS doctor_last_name
-        FROM 
-            Appointments a
-        JOIN 
-            Patients p ON a.patient_id = p.patient_id
-        JOIN 
-            Doctors d ON a.doctor_id = d.doctor_id;
-    `;
-    
-    db.query(sql, (err, results) => {
+// Delete a doctor by ID
+  app.delete("/delete-doctor/:id", (req, res) => {
+    const doctorId = req.params.id;
+    const sql = "DELETE FROM Doctors WHERE doctor_id = ?";
+
+    db.query(sql, [doctorId], (err, results) => {
         if (err) {
-            res.status(500).json({ error: err });
+            console.error("Error deleting doctor:", err);
+            res.status(500).json({ error: "Database error" });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ message: "doctor not found" });
         } else {
-            res.json(results);
+            console.log("doctor deleted successfully, ID:", doctorId);
+            res.json({ message: "doctor deleted successfully" });
         }
     });
 });
+
+// Get all appointments with patient and doctor details
+app.get("/appointments-details", (req, res) => {
+    db.query("SELECT * FROM AppointmentDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
+    });
+  });
 
 // Add a new appointment
-app.post("/appointments", (req, res) => {
-    const { patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, appointment_status } = req.body;
-    const sql = `
-        INSERT INTO Appointments (patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, appointment_status) 
-        VALUES (?, ?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, appointment_status], (err, results) => {
+app.post("/add-appointments", (req, res) => {
+    const { patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, appointment_status }  = req.body;
+  
+    const sql = `CALL ScheduleAppointment(?, ?, ?, ?, ?, ?)`;
+    db.query(sql,  [patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, appointment_status], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "appointments added successfully!" });
+    });
+  });
+
+  
+
+  app.update("/update-appointment/:id", (req, res) => {
+    const appointmentId = req.params.id;
+    //complete it 
+    const sql = "UPDATE appointments SET appointment_status 'Completed' WHERE condition appointment_id= ?";
+
+    db.query(sql, [appointmentId], (err, results) => {
         if (err) {
-            res.status(500).json({ error: err });
+            console.error("Error Updating bill:", err);
+            res.status(500).json({ error: "Database error" });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ message: "bill not found" });
         } else {
-            res.json({ message: "Appointment added successfully", appointmentId: results.insertId });
+            console.log("Bill updated successfully, ID:", patientId);
+            res.json({ message: "Bill updated successfully" });
         }
     });
 });
-
 // Get all inpatient records with patient details
-app.get("/inpatientRecords", (req, res) => {
-    const sql = `
-        SELECT 
-            ir.inpatient_id, 
-            ir.admission_date, 
-            ir.discharge_date, 
-            ir.room_number, 
-            ir.ward, 
-            ir.diagnosis, 
-            ir.treatment_plan,
-            p.first_name AS patient_first_name,
-            p.last_name AS patient_last_name
-        FROM 
-            InpatientRecords ir
-        JOIN 
-            Patients p ON ir.patient_id = p.patient_id;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/inpatientRecords-details", (req, res) => {
+    db.query("SELECT * FROM InpatientRecordDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
-
+  });
 // Add a new inpatient record
-app.post("/inpatientRecords", (req, res) => {
-    const { patient_id, admission_date, discharge_date, room_number, ward, diagnosis, treatment_plan } = req.body;
-    const sql = `
-        INSERT INTO InpatientRecords (patient_id, admission_date, discharge_date, room_number, ward, diagnosis, treatment_plan) 
-        VALUES (?, ?, ?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, admission_date, discharge_date, room_number, ward, diagnosis, treatment_plan], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Inpatient record added successfully", inpatientId: results.insertId });
-        }
+
+app.post("/add-inpatientRecords", (req, res) => {
+    const { patient_id, admission_date, discharge_date, room_number, ward, diagnosis, treatment_plan }= req.body;
+  
+    const sql = `CALL AddInpatientRecord(?, ?, ?, ?, ?, ?, ?)`;
+    db.query(sql,  [patient_id, admission_date, discharge_date, room_number, ward, diagnosis, treatment_plan], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "inpatientRecords added successfully!" });
     });
-});
+  });
+  
 
 // Get all outpatient records with patient details
 app.get("/outpatientRecords-details", (req, res) => {
@@ -258,48 +240,41 @@ app.post("/add-staff", (req, res) => {
 
 
 // Get all billing records with patient details
-app.get("/billing", (req, res) => {
-    const sql = `
-        SELECT 
-            b.bill_id, 
-            b.bill_date, 
-            b.items, 
-            b.total_amount, 
-            b.payment_status,
-            patient.first_name AS patient_first_name,
-            patient.last_name AS patient_last_name
-        FROM 
-            Billing b
-        JOIN 
-            Patients patient ON b.patient_id = patient.patient_id;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/billing-details", (req, res) => {
+    db.query("SELECT * FROM BillingDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
+  });
 
 // Add a new billing record
-app.post("/billing", (req, res) => {
-    const { patient_id, bill_date, items, total_amount, payment_status } = req.body;
-    const sql = `
-        INSERT INTO Billing (patient_id, bill_date, items, total_amount, payment_status) 
-        VALUES (?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, bill_date, items, total_amount, payment_status], (err, results) => {
+app.post("/add-billing", (req, res) => {
+    const { patient_id, bill_date, items, total_amount, payment_status }  = req.body;
+  
+    const sql = `CALL AddBilling(?, ?, ?, ?, ?)`;
+    db.query(sql, [patient_id, bill_date, items, total_amount, payment_status], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Billing record added successfully!" });
+    });
+  });
+
+  app.update("/update-bill/:id", (req, res) => {
+    const billId = req.params.id;
+    //complete it 
+    const sql = "UPDATE billing SET payment_status= 'Paid' WHERE condition bill_id= ?";
+
+    db.query(sql, [billId], (err, results) => {
         if (err) {
-            res.status(500).json({ error: err });
+            console.error("Error Updating bill:", err);
+            res.status(500).json({ error: "Database error" });
+        } else if (results.affectedRows === 0) {
+            res.status(404).json({ message: "bill not found" });
         } else {
-            res.json({ message: "Billing record added successfully", billId: results.insertId });
+            console.log("Bill updated successfully, ID:", patientId);
+            res.json({ message: "Bill updated successfully" });
         }
     });
 });
-
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

@@ -37,6 +37,7 @@
                   <li>
                     <i class="fa fa-envelope"></i> Email:
                     unityhospital@gmail.com
+                    
                   </li>
                   <li><i class="fa fa-phone"></i> Contact no : 88666 00555</li>
                 </ul>
@@ -378,7 +379,7 @@
     <script>
       // Fetch and display all appointments when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/appointments")
+        fetch("http://localhost:3000/appointments-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("appointmentTable");
@@ -392,6 +393,7 @@
                             <td>${appointment.appointment_time}</td>
                             <td>${appointment.appointment_reason}</td>
                             <td>${appointment.appointment_status}</td>
+                            <td><button onclick="updateappointment(${appointment.appointment_id})">COMPLETED</button>
                         `;
             });
           })
@@ -415,7 +417,7 @@
             document.getElementById("appointment_status").value,
         };
 
-        fetch("http://localhost:3000/appointments", {
+        fetch("http://localhost:3000/add-appointments", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -427,23 +429,23 @@
             console.log(data.message);
 
             // Append the new appointment to the table
-            const table = document.getElementById("appointmentTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.appointmentId}</td>
-                    <td>${appointmentData.patient_id}</td>
-                    <td>${appointmentData.doctor_id}</td>
-                    <td>${appointmentData.appointment_date}</td>
-                    <td>${appointmentData.appointment_time}</td>
-                    <td>${appointmentData.appointment_reason}</td>
-                    <td>${appointmentData.appointment_status}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addAppointmentForm").reset();
+            location.reload(); // Reload to show updated list
           })
           .catch((error) => console.error("Error adding appointment:", error));
       }
+
+      function updateappointment(appointmentId) {
+          if (confirm("Are you sure you want to update this appointment?")) {
+            fetch(`http://localhost:3000/update-appointment/${appointmentId}`, {
+              method: "UPDATE",
+            })
+              .then((response) => {
+                if (!response.ok) throw new Error("Failed to update appointment");
+                location.reload();
+              })
+              .catch((error) => console.error("Error update appointment:", error));
+          }
+        }
     </script>
   </body>
 </html>

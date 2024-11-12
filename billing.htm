@@ -100,7 +100,8 @@
                   <li class="mega-menu-fullwidth">
                     <a href="staff.htm"> STAFF </a>
                   </li>
-                  <!-- End Other Staffs -->
+                  <!-- End Other Staff
+                   s -->
 
                   <!-- Gallery -->
                   <li class="mega-menu-fullwidth">
@@ -373,7 +374,7 @@
     <script>
       // Fetch and display all billing records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/billing")
+        fetch("http://localhost:3000/billing-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("billingTable");
@@ -386,6 +387,7 @@
                             <td>${record.items}</td>
                             <td>${record.total_amount}</td>
                             <td>${record.payment_status}</td>
+                            <td><button onclick="updatebill(${record.bill_id})">Paid</button></td>
                         `;
             });
           })
@@ -406,7 +408,7 @@
           payment_status: document.getElementById("payment_status").value,
         };
 
-        fetch("http://localhost:3000/billing", {
+        fetch("http://localhost:3000/add-billing", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -416,26 +418,25 @@
           .then((response) => response.json())
           .then((data) => {
             console.log(data.message);
-
-            // Append the new billing record to the table
-            const table = document.getElementById("billingTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.billId}</td>
-                    <td>${billingData.patient_id}</td>
-                    <td>${billingData.bill_date}</td>
-                    <td>${billingData.items}</td>
-                    <td>${billingData.total_amount}</td>
-                    <td>${billingData.payment_status}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addBillingForm").reset();
+            location.reload(); // Reload to show updated list
           })
           .catch((error) =>
             console.error("Error adding billing record:", error)
           );
       }
+
+      function updatebill(billId) {
+          if (confirm("Are you sure you want to update this bill?")) {
+            fetch(`http://localhost:3000/update-bill/${billId}`, {
+              method: "UPDATE",
+            })
+              .then((response) => {
+                if (!response.ok) throw new Error("Failed to update bill");
+                location.reload();
+              })
+              .catch((error) => console.error("Error update bill:", error));
+          }
+        }
     </script>
   </body>
 </html>

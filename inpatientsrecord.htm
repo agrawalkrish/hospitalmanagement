@@ -138,7 +138,8 @@
                   </li>
                   <!-- End Out labtests-->
 
-                  <!-- Appointment -->
+                  <!-- Appointment
+                    -->
                   <li class="mega-menu-fullwidth">
                     <a href="appointments.htm"> BOOK APPOINTMENT </a>
                   </li>
@@ -381,7 +382,7 @@
     <script>
       // Fetch and display all inpatient records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/inpatientRecords")
+        fetch("http://localhost:3000/inpatientRecords-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("inpatientTable");
@@ -420,7 +421,7 @@
           treatment_plan: document.getElementById("treatment_plan").value,
         };
 
-        fetch("http://localhost:3000/inpatientRecords", {
+        fetch("http://localhost:3000/add-inpatientRecords", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -431,22 +432,7 @@
           .then((data) => {
             console.log(data.message);
 
-            // Append the new inpatient record to the table
-            const table = document.getElementById("inpatientTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.inpatientId}</td>
-                    <td>${inpatientData.patient_id}</td>
-                    <td>${inpatientData.admission_date}</td>
-                    <td>${inpatientData.discharge_date || "N/A"}</td>
-                    <td>${inpatientData.room_number}</td>
-                    <td>${inpatientData.ward}</td>
-                    <td>${inpatientData.diagnosis}</td>
-                    <td>${inpatientData.treatment_plan}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addInpatientForm").reset();
+            location.reload(); // Reload to show updated list
           })
           .catch((error) =>
             console.error("Error adding inpatient record:", error)

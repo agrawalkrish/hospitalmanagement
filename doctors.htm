@@ -386,6 +386,7 @@
                             <td>${doctor.contact_number}</td>
                             <td>${doctor.qualifications}</td>
                             <td>${doctor.experience}</td>
+                            <td><button onclick="deletedoctor(${doctor.doctor_id})">Delete</button></td>
                         `;
             });
           })
@@ -420,6 +421,20 @@
           })
           .catch((error) => console.error("Error adding doctor:", error));
       }
+
+      // Function to delete a patient (implement on backend as needed)
+      function deletedoctor(doctorId) {
+          if (confirm("Are you sure you want to delete this doctor?")) {
+            fetch(`http://localhost:3000/delete-doctor/${doctorId}`, {
+              method: "DELETE",
+            })
+              .then((response) => {
+                if (!response.ok) throw new Error("Failed to delete patient");
+                location.reload();
+              })
+              .catch((error) => console.error("Error deleting patient:", error));
+          }
+        }
     </script>
   </body>
 </html>
