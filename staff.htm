@@ -376,7 +376,7 @@
     <script>
       // Fetch and display all staff records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/staff")
+        fetch("http://localhost:3000/staff-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("staffTable");
@@ -408,7 +408,7 @@
           contact_number: document.getElementById("contact_number").value,
         };
 
-        fetch("http://localhost:3000/staff", {
+        fetch("http://localhost:3000/add-staff", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -420,18 +420,7 @@
             console.log(data.message);
 
             // Append the new staff record to the table
-            const table = document.getElementById("staffTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.staffId}</td>
-                    <td>${staffData.first_name} ${staffData.last_name}</td>
-                    <td>${staffData.job_title}</td>
-                    <td>${staffData.department}</td>
-                    <td>${staffData.contact_number}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addStaffForm").reset();
+            location.reload();
           })
           .catch((error) => console.error("Error adding staff record:", error));
       }

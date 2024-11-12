@@ -29,33 +29,26 @@ db.connect((err) => {
 // API Endpoints
 
 // Get all patients
-app.get("/patients", (req, res) => {
-    const sql = "SELECT * FROM Patients";
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/patient-details", (req, res) => {
+    db.query("SELECT * FROM PatientDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
+  });
 
 // Add a new patient
-app.post("/patients", (req, res) => {
-    const { first_name, last_name, date_of_birth, gender, address, contact_number, insurance_information } = req.body;
-    const sql = "INSERT INTO Patients (first_name, last_name, date_of_birth, gender, address, contact_number, insurance_information) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    db.query(sql, [first_name, last_name, date_of_birth, gender, address, contact_number, insurance_information], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Patient added successfully", patientId: results.insertId });
-        }
+app.post("/add-patient", (req, res) => {
+    const { first_name, last_name, date_of_birth, gender, address, contact_number, insurance_information, medical_history } = req.body;
+  
+    const sql = `CALL AddPatient(?, ?, ?, ?, ?, ?, ?, ?)`;
+    db.query(sql, [first_name, last_name, date_of_birth, gender, address, contact_number, insurance_information, medical_history], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Patient added successfully!" });
     });
-});
+  });
 
 // Delete a patient by ID
-app.delete("/patients/:id", (req, res) => {
+app.delete("/delete-patient/:id", (req, res) => {
     const patientId = req.params.id;
     const sql = "DELETE FROM Patients WHERE patient_id = ?";
 
@@ -72,31 +65,26 @@ app.delete("/patients/:id", (req, res) => {
     });
 });
 
+
 // Get all doctors
-app.get("/doctors", (req, res) => {
-    const sql = "SELECT * FROM Doctors";
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/doctor-details", (req, res) => {
+    db.query("SELECT * FROM DoctorDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
+  });
+
 
 // Add a new doctor
-app.post("/doctors", (req, res) => {
+app.post("/add-doctor", (req, res) => {
     const { first_name, last_name, specialization, contact_number, qualifications, experience } = req.body;
-    const sql = "INSERT INTO Doctors (first_name, last_name, specialization, contact_number, qualifications, experience) VALUES (?, ?, ?, ?, ?, ?)";
-
-    db.query(sql, [first_name, last_name, specialization, contact_number, qualifications, experience], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Doctor added successfully", doctorId: results.insertId });
-        }
+  
+    const sql = `CALL AddDoctor(?, ?, ?, ?, ?, ?)`;
+    db.query(sql,  [first_name, last_name, specialization, contact_number, qualifications, experience], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Doctor added successfully!" });
     });
-});
+  });
 
 // Get all appointments with patient and doctor details
 app.get("/appointments", (req, res) => {
@@ -193,176 +181,81 @@ app.post("/inpatientRecords", (req, res) => {
 });
 
 // Get all outpatient records with patient details
-app.get("/outpatientRecords", (req, res) => {
-    const sql = `
-        SELECT 
-            orc.outpatient_id, 
-            orc.visit_date, 
-            orc.reason_for_visit, 
-            orc.diagnosis, 
-            orc.treatment_provided,
-            p.first_name AS patient_first_name,
-            p.last_name AS patient_last_name
-        FROM 
-            OutpatientRecords orc
-        JOIN 
-            Patients p ON orc.patient_id = p.patient_id;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/outpatientRecords-details", (req, res) => {
+    db.query("SELECT * FROM OutpatientRecordDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
-
+  });
 // Add a new outpatient record
-app.post("/outpatientRecords", (req, res) => {
-    const { patient_id, visit_date, reason_for_visit, diagnosis, treatment_provided } = req.body;
-    const sql = `
-        INSERT INTO OutpatientRecords (patient_id, visit_date, reason_for_visit, diagnosis, treatment_provided) 
-        VALUES (?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, visit_date, reason_for_visit, diagnosis, treatment_provided], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Outpatient record added successfully", outpatientId: results.insertId });
-        }
+app.post("/add-outpatientRecords", (req, res) => {
+    const { patient_id, visit_date, reason_for_visit, diagnosis, treatment_provided }= req.body;
+  
+    const sql = `CALL AddOutpatientRecord(?, ?, ?, ?, ?)`;
+    db.query(sql,  [patient_id, visit_date, reason_for_visit, diagnosis, treatment_provided], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Outpatient record added successfully" });
     });
-});
+  });
 
 // Get all laboratory test records with patient details
-app.get("/laboratoryTests", (req, res) => {
-    const sql = `
-        SELECT 
-            lt.test_id, 
-            lt.test_date, 
-            lt.test_name, 
-            lt.test_results,
-            p.first_name AS patient_first_name,
-            p.last_name AS patient_last_name
-        FROM 
-            LaboratoryTests lt
-        JOIN 
-            Patients p ON lt.patient_id = p.patient_id;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/laboratoryTests-details", (req, res) => {
+    db.query("SELECT * FROM LabTestDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
+  });
+
 
 // Add a new laboratory test record
-app.post("/laboratoryTests", (req, res) => {
+app.post("/add-laboratoryTests", (req, res) => {
     const { patient_id, test_date, test_name, test_results } = req.body;
-    const sql = `
-        INSERT INTO LaboratoryTests (patient_id, test_date, test_name, test_results) 
-        VALUES (?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, test_date, test_name, test_results], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Laboratory test record added successfully", testId: results.insertId });
-        }
+  
+    const sql = `CALL AddLaboratoryTest(?, ?, ?, ?)`;
+    db.query(sql,  [patient_id, test_date, test_name, test_results], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Laboratory test record added successfully" });
     });
-});
+  });
+
 
 // Get all prescriptions with patient and doctor details
-app.get("/prescriptions", (req, res) => {
-    const sql = `
-        SELECT 
-            p.prescription_id, 
-            p.prescription_date, 
-            p.medication_name, 
-            p.dosage, 
-            p.quantity,
-            patient.first_name AS patient_first_name,
-            patient.last_name AS patient_last_name,
-            doctor.first_name AS doctor_first_name,
-            doctor.last_name AS doctor_last_name
-        FROM 
-            Prescriptions p
-        JOIN 
-            Patients patient ON p.patient_id = patient.patient_id
-        JOIN 
-            Doctors doctor ON p.doctor_id = doctor.doctor_id;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/prescriptions-details", (req, res) => {
+    db.query("SELECT * FROM PrescriptionDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
-
+  });
 // Add a new prescription record
-app.post("/prescriptions", (req, res) => {
+app.post("/add-prescriptions", (req, res) => {
     const { patient_id, doctor_id, prescription_date, medication_name, dosage, quantity } = req.body;
-    const sql = `
-        INSERT INTO Prescriptions (patient_id, doctor_id, prescription_date, medication_name, dosage, quantity) 
-        VALUES (?, ?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [patient_id, doctor_id, prescription_date, medication_name, dosage, quantity], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Prescription added successfully", prescriptionId: results.insertId });
-        }
+  
+    const sql = `CALL AddPrescription(?, ?, ?, ?, ?, ?)`;
+    db.query(sql, [patient_id, doctor_id, prescription_date, medication_name, dosage, quantity], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Prescription added successfully" });
     });
-});
+  });
 
 // Get all staff records
-app.get("/staff", (req, res) => {
-    const sql = `
-        SELECT 
-            staff_id, 
-            first_name, 
-            last_name, 
-            job_title, 
-            department, 
-            contact_number
-        FROM 
-            Staff;
-    `;
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json(results);
-        }
+app.get("/staff-details", (req, res) => {
+    db.query("SELECT * FROM StaffDetails", (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json(results);
     });
-});
+  });
 
 // Add a new staff record
-app.post("/staff", (req, res) => {
+app.post("/add-staff", (req, res) => {
     const { first_name, last_name, job_title, department, contact_number } = req.body;
-    const sql = `
-        INSERT INTO Staff (first_name, last_name, job_title, department, contact_number) 
-        VALUES (?, ?, ?, ?, ?);
-    `;
-    
-    db.query(sql, [first_name, last_name, job_title, department, contact_number], (err, results) => {
-        if (err) {
-            res.status(500).json({ error: err });
-        } else {
-            res.json({ message: "Staff record added successfully", staffId: results.insertId });
-        }
+  
+    const sql = `CALL AddStaff(?, ?, ?, ?, ?)`;
+    db.query(sql, [first_name, last_name, job_title, department, contact_number], (error, results) => {
+      if (error) return res.status(500).json({ error });
+      res.json({ message: "Staff added successfully!" });
     });
-});
+  });
+
 
 // Get all billing records with patient details
 app.get("/billing", (req, res) => {

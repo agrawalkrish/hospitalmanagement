@@ -374,7 +374,7 @@
     <script>
       // Fetch and display all outpatient records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/outpatientRecords")
+        fetch("http://localhost:3000/outpatientRecords-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("outpatientTable");
@@ -408,7 +408,7 @@
             document.getElementById("treatment_provided").value,
         };
 
-        fetch("http://localhost:3000/outpatientRecords", {
+        fetch("http://localhost:3000/add-outpatientRecords", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -420,19 +420,7 @@
             console.log(data.message);
 
             // Append the new outpatient record to the table
-            const table = document.getElementById("outpatientTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.outpatientId}</td>
-                    <td>${outpatientData.patient_id}</td>
-                    <td>${outpatientData.visit_date}</td>
-                    <td>${outpatientData.reason_for_visit}</td>
-                    <td>${outpatientData.diagnosis}</td>
-                    <td>${outpatientData.treatment_provided}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addOutpatientForm").reset();
+            location.reload();
           })
           .catch((error) =>
             console.error("Error adding outpatient record:", error)

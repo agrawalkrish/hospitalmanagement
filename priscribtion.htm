@@ -378,7 +378,7 @@
     <script>
       // Fetch and display all prescription records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/prescriptions")
+        fetch("http://localhost:3000/prescriptions-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("prescriptionTable");
@@ -413,7 +413,7 @@
           quantity: document.getElementById("quantity").value,
         };
 
-        fetch("http://localhost:3000/prescriptions", {
+        fetch("http://localhost:3000/add-prescriptions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -425,20 +425,7 @@
             console.log(data.message);
 
             // Append the new prescription record to the table
-            const table = document.getElementById("prescriptionTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.prescriptionId}</td>
-                    <td>${prescriptionData.patient_id}</td>
-                    <td>${prescriptionData.doctor_id}</td>
-                    <td>${prescriptionData.prescription_date}</td>
-                    <td>${prescriptionData.medication_name}</td>
-                    <td>${prescriptionData.dosage}</td>
-                    <td>${prescriptionData.quantity}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addPrescriptionForm").reset();
+            location.reload();
           })
           .catch((error) =>
             console.error("Error adding prescription record:", error)

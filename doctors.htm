@@ -372,7 +372,7 @@
     <script>
       // Fetch and display all doctors when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/doctors")
+        fetch("http://localhost:3000/doctor-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("doctorTable");
@@ -405,7 +405,7 @@
           experience: document.getElementById("experience").value,
         };
 
-        fetch("http://localhost:3000/doctors", {
+        fetch("http://localhost:3000/add-doctor", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -416,21 +416,7 @@
           .then((data) => {
             console.log(data.message);
 
-            // Append the new doctor to the table
-            const table = document.getElementById("doctorTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.doctorId}</td>
-                    <td>${doctorData.first_name}</td>
-                    <td>${doctorData.last_name}</td>
-                    <td>${doctorData.specialization}</td>
-                    <td>${doctorData.contact_number}</td>
-                    <td>${doctorData.qualifications}</td>
-                    <td>${doctorData.experience}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addDoctorForm").reset();
+            location.reload();
           })
           .catch((error) => console.error("Error adding doctor:", error));
       }

@@ -369,7 +369,7 @@
     <script>
       // Fetch and display all laboratory test records when loading the page
       document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/laboratoryTests")
+        fetch("http://localhost:3000/laboratoryTests-details")
           .then((response) => response.json())
           .then((data) => {
             const table = document.getElementById("laboratoryTable");
@@ -400,7 +400,7 @@
           test_results: document.getElementById("test_results").value,
         };
 
-        fetch("http://localhost:3000/laboratoryTests", {
+        fetch("http://localhost:3000/add-laboratoryTests", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -411,19 +411,7 @@
           .then((data) => {
             console.log(data.message);
 
-            // Append the new laboratory test record to the table
-            const table = document.getElementById("laboratoryTable");
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-                    <td>${data.testId}</td>
-                    <td>${laboratoryData.patient_id}</td>
-                    <td>${laboratoryData.test_date}</td>
-                    <td>${laboratoryData.test_name}</td>
-                    <td>${laboratoryData.test_results}</td>
-                `;
-
-            // Clear the form
-            document.getElementById("addLaboratoryForm").reset();
+            location.reload();
           })
           .catch((error) =>
             console.error("Error adding laboratory test record:", error)
