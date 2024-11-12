@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Unity Hospital | Blog</title>
-
-    <!-- Web Fonts -->
-    <link
-      rel="stylesheet"
-      href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin"
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctors</title>
+    <link rel="stylesheet" href="style.css" />
 
     <!-- CSS Global Compulsory -->
     <link
@@ -27,17 +24,10 @@
       rel="stylesheet"
       href="assets/plugins/font-awesome/css/font-awesome.min.css"
     />
-
-    <!-- CSS Page Style -->
-    <link rel="stylesheet" href="assets/css/blog_timeline.css" />
-
-    <!-- CSS Customization -->
-    <link rel="stylesheet" type="text/css" href="assets/css/custom.css" />
   </head>
   <body>
-    <div class="wrapper">
-      <!--=== Header v1 ===-->
-      <div class="header-v1">
+    <!--=== Header v1 ===-->
+    <div class="header-v1">
         <!-- Topbar -->
         <div class="topbar-v1">
           <div class="container">
@@ -160,235 +150,44 @@
         </div>
       </div>
       <!-- End Navbar -->
-
-      <!-- Image title -->
-
-      <div style="text-align: center; margin-top: 50px; margin-bottom: 40px">
-        <h2>BLOGS</h2>
+    <h1>Doctors Management</h1>
+    <div class="contain">
+      <div class="input-section">
+        <!-- Form to Add New Doctor -->
+        <form id="addDoctorForm" onsubmit="addDoctor(event)">
+          <label for="first_name">First Name:</label>
+          <input type="text" id="first_name" required />
+          <label for="last_name">Last Name:</label>
+          <input type="text" id="last_name" required />
+          <label for="specialization">Specialization:</label>
+          <input type="text" id="specialization" />
+          <label for="contact_number">Contact Number:</label>
+          <input type="text" id="contact_number" />
+          <label for="qualifications">Qualifications:</label>
+          <input type="text" id="qualifications" />
+          <label for="experience">Experience (Years):</label>
+          <input type="number" id="experience" />
+          <button type="submit">Add Doctor</button>
+        </form>
       </div>
-      <!-- End title  -->
-
-      <!--=== Content Part ===-->
-      <!-- BLOG 1 -->
-      <div class="container content">
-        <ul class="timeline-v1">
-          <li>
-            <div class="timeline-badge primary">
-              <i class="glyphicon glyphicon-record"></i>
-            </div>
-            <div class="timeline-panel">
-              <div class="timeline-heading">
-                <img
-                  class="img-responsive"
-                  src="assets/img/blogs/1.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="timeline-body text-justify">
-                <h2 class="font-light">
-                  <a href="#"
-                    >How to maintain bone and joint health during winters?</a
-                  >
-                </h2>
-                <p>
-                  It is usually due to restricted absorption of Vitamin D
-                  (sunlight) in your body during winter or due to decreased
-                  blood flow to bones to increase body temperature or due to
-                  restricted mobility to conserve energy which allows
-                  accumulation of inflammatory markers or toxins in joints. This
-                  leads to stiffness and pain in joints. Ignoring problems
-                  related to bones and joints which can lead to further
-                  deterioration.
-                </p>
-                <p>
-                  These are few tips to keep your joints and muscles healthy
-                  during this winter :-
-                </p>
-                <p>
-                  1) A balanced diet is key to overall healthy living. Eat a
-                  diet which comprises of fruits, vegetables, cereals, dairy
-                  products and pulses.<br />
-
-                  2) Eat foods rich in Vitamin K, D and C.<br />
-                  3) Physical activity is also important. Exercising strengthens
-                  the muscles and maintains weight. <br />
-                  4) Do not over eat and reduce weight.
-                </p>
-              </div>
-              <div class="timeline-footer">
-                <ul class="list-inline news-v1-info">
-                  <li>
-                    <span style="margin-left: 120px">By</span>
-                    <a href="#">Dr. Ramneek Mahajan</a>
-                  </li>
-                  <li>|</li>
-                  <li><i class="fa fa-clock-o"></i> December 31, 2020</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <!-- end of blog 1 -->
-          <!-- Blog 2 -->
-          <li class="timeline-inverted">
-            <div class="timeline-badge primary">
-              <i class="glyphicon glyphicon-record invert"></i>
-            </div>
-            <div class="timeline-panel">
-              <div class="timeline-heading">
-                <img
-                  class="img-responsive"
-                  src="assets/img/blogs/2.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="timeline-body text-justify">
-                <h2 class="font-light">
-                  <a href="#">Robot Assisted Kidney Transplant in France</a>
-                </h2>
-                <p>
-                  First robot assisted kidney transplant (RAKT) was performed in
-                  France in 2002. Since then, it is gradually gaining foothold
-                  in transplant arena. Majority of work is being done in India,
-                  Europe and few centres in USA. World wide experience has
-                  established its functional outcomes comparable to open
-                  transplant. The patient has got multiple benefits :-
-                </p>
-
-                <p>1) Lesser pain – early mobility, early recovery</p>
-                <br />
-                <p>
-                  2) Less chance of wound infection – no adverse effect on graft
-                  function
-                </p>
-                <br />
-                <p>
-                  3) Less blood loss, Minimal scars, improved cosmetic effects
-                </p>
-                <br />
-                <p>
-                  Max Super Specialty Hospital, Saket, New Delhi is amongst the
-                  few centres across the world routinely doing RAKT.
-                </p>
-              </div>
-              <div class="timeline-footer">
-                <ul class="list-unstyled list-inline blog-info">
-                  <li>
-                    <span style="margin-left: 120px">By</span>
-                    <a href="#">Dr. Anant Kumar</a>
-                  </li>
-                  <li>|</li>
-                  <li><i class="fa fa-clock-o"></i> December 31, 2020</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <!-- end of blog 2 -->
-          <!-- Blog 3 -->
-          <li>
-            <div class="timeline-badge primary">
-              <i class="glyphicon glyphicon-record"></i>
-            </div>
-            <div class="timeline-panel">
-              <div class="timeline-heading">
-                <img
-                  class="img-responsive"
-                  src="assets/img/blogs/3.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="timeline-body text-justify">
-                <h2 class="font-light">
-                  <a href="#">Body Weight - What you must know!</a>
-                </h2>
-                <p>Q: Why is body weight so important to us?</p>
-                <p>
-                  A: Bodyweight is a vital part of our physical and mental
-                  health.
-                </p>
-                <br />
-
-                <p>Q: What is an ideal body weight?</p>
-                <p>
-                  A: There is no single defined value for an ideal weight. The
-                  ideal weight for a person depends on their height and age.
-                </p>
-                <br />
-
-                <p>Q: Why is there a weight range?</p>
-                <p>
-                  A: Your weight depends upon a number of factors. These include
-                  your age, muscle mass fat mass, gender and body shape.
-                </p>
-              </div>
-              <div class="timeline-footer">
-                <ul class="list-unstyled list-inline blog-info">
-                  <li>
-                    <span style="margin-left: 120px">By</span>
-                    <a href="#">Dr. Vandana Soni</a>
-                  </li>
-                  <li>|</li>
-                  <li><i class="fa fa-clock-o"></i> December 31, 2020</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <!-- end of blog 3 -->
-
-          <!-- Blog 4 -->
-          <li class="timeline-inverted">
-            <div class="timeline-badge primary">
-              <i class="glyphicon glyphicon-record invert"></i>
-            </div>
-            <div class="timeline-panel">
-              <div class="timeline-heading">
-                <img
-                  class="img-responsive"
-                  src="assets/img/blogs/4.jpg"
-                  alt=""
-                />
-              </div>
-              <div class="timeline-body text-justify">
-                <h2 class="font-light">
-                  <a href="#">IMPORTANCE OF SLEEP IN BRAIN HEALTH</a>
-                </h2>
-                <p>
-                  Those mood swings are for real…. Your brain regulates the
-                  hormones and the neurotrasnmitters. These chemicals are
-                  basically responsible for the way you feel. Chemical compounds
-                  like dopamine, serotonin, oxytocin help us feeling good, happy
-                  and upbeat. Sleep plays an important role in their regulation.
-                  Lack of sleep can make you irritated, impulsive and angry. The
-                  moments when you over react and have an outburst are more
-                  likely to happen when you have not slept well.
-                </p>
-
-                <p>
-                  Lack of sleep makes you slow. Sleep deprivation slows down the
-                  brain’s ability to react quickly. Tired drivers and pilots
-                  tend to have more accidents and that is a well known fact.
-                  Sleep deprivation slows down the brain akin to getting drunk.
-                  Just like you should not be driving under the influence of
-                  alcohol the same applies to sleep deprivation.
-                </p>
-              </div>
-              <div class="timeline-footer">
-                <ul class="list-unstyled list-inline blog-info">
-                  <li>
-                    <span style="margin-left: 120px">By</span>
-                    <a href="#">Dr. Manish Baijal</a>
-                  </li>
-                  <li>|</li>
-                  <li><i class="fa fa-clock-o"></i> December 31, 2020</li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <!-- end of blog 4 -->
-        </ul>
+      <div class="output-section">
+        <!-- Table to Display Doctors -->
+        <table id="doctorTable" border="1">
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Specialization</th>
+            <th>Contact Number</th>
+            <th>Qualifications</th>
+            <th>Experience</th>
+          </tr>
+        </table>
       </div>
+    </div>
 
-      <!--=== Footer ===-->
-      <div class="footer-v1">
+    <!--=== Footer ===-->
+    <div class="footer-v1">
         <div class="footer">
           <div class="container">
             <div class="row">
@@ -570,7 +369,71 @@
         <!--/copyright-->
       </div>
       <!--=== End Footer ===-->
-    </div>
-    <!--/wrapper-->
+    <script>
+      // Fetch and display all doctors when loading the page
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("http://localhost:3000/doctors")
+          .then((response) => response.json())
+          .then((data) => {
+            const table = document.getElementById("doctorTable");
+            data.forEach((doctor) => {
+              const newRow = table.insertRow();
+              newRow.innerHTML = `
+                            <td>${doctor.doctor_id}</td>
+                            <td>${doctor.first_name}</td>
+                            <td>${doctor.last_name}</td>
+                            <td>${doctor.specialization}</td>
+                            <td>${doctor.contact_number}</td>
+                            <td>${doctor.qualifications}</td>
+                            <td>${doctor.experience}</td>
+                        `;
+            });
+          })
+          .catch((error) => console.error("Error fetching doctors:", error));
+      });
+
+      // Function to handle form submission and add a new doctor
+      function addDoctor(event) {
+        event.preventDefault();
+
+        const doctorData = {
+          first_name: document.getElementById("first_name").value,
+          last_name: document.getElementById("last_name").value,
+          specialization: document.getElementById("specialization").value,
+          contact_number: document.getElementById("contact_number").value,
+          qualifications: document.getElementById("qualifications").value,
+          experience: document.getElementById("experience").value,
+        };
+
+        fetch("http://localhost:3000/doctors", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(doctorData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.message);
+
+            // Append the new doctor to the table
+            const table = document.getElementById("doctorTable");
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+                    <td>${data.doctorId}</td>
+                    <td>${doctorData.first_name}</td>
+                    <td>${doctorData.last_name}</td>
+                    <td>${doctorData.specialization}</td>
+                    <td>${doctorData.contact_number}</td>
+                    <td>${doctorData.qualifications}</td>
+                    <td>${doctorData.experience}</td>
+                `;
+
+            // Clear the form
+            document.getElementById("addDoctorForm").reset();
+          })
+          .catch((error) => console.error("Error adding doctor:", error));
+      }
+    </script>
   </body>
 </html>
